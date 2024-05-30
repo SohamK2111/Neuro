@@ -109,7 +109,7 @@ class StepModel():
         spikes, jumps, rates = [], [], []
         for tr in range(Ntrials):
             # sample jump time
-            jump = npr.negative_binomial(self.r, self.p)
+            jump = npr.negative_binomial(self.r, self.p) 
             jumps.append(jump)
 
             # first set rate at all times to pre-step rate
@@ -226,5 +226,29 @@ class RampModel():
         if get_rate:
             return spikes, xs, rates
         else:
-            return spikes, xs
+            return spikes, xs 
+
+"""Study the code in `models.py`, specifically the implementations of the two models in the `StepModel` and `RampModel` classes. <br>
+The main part to study (and relate to the mathematical discussion above) is their `simulate` method/function. You create <br>
+an object instance of each model by providing the model parameters (both "fit" and "fixed" parameters, as named above)<br>
+to the class constructors: e.g. `ramp = RampModel(beta=..., sigma=..., ...)`. <br>
+(Ignore the other input arguments in the class constructor `__init__` for now, and leave them at their default values.)<br>
+Once a model object is created you can use its `simulate` method to get an array of spike trains over multiple trials. <br>
+(For usage see the docstring (or run help via `ramp.simulate?`.) `simulate` will also return the generated latent variables, <br>
+and, optionally, the firing rates in different trials."""
+
+# Example usage of the StepModel and RampModel classes:
+# Create a StepModel object with some parameters
+step = StepModel(m=50, r=10, x0=0.2, Rh=50, isi_gamma_shape=2) 
+# Simulate 10 trials of 100 time-steps each
+spikes_step, jumps_step, rates_step = step.simulate(Ntrials=10, T=100, get_rate=True)
+
+print(spikes_step[0]) #Each time step is 10ms
+#m is the mean jump time in number of time-steps
+#r is the parameter r of the negative binomial distribution of jump time which is the number of successes, which in this context is the number of time-steps before a jump occurs
+
+# Create a RampModel object with some parameters
+ramp = RampModel(beta=0.5, sigma=0.2, x0=.2, Rh=50, isi_gamma_shape=2)
+# Simulate 10 trials of 100 time-steps each
+spikes_ramp, xs_ramp, rates_ramp = ramp.simulate(Ntrials=10, T=100, get_rate=True)
 
