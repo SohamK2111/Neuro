@@ -10,7 +10,7 @@ from scipy.special import gammaln
 LOG_EPS = 1e-16
 
 
-@numba.jit(nopython=True, cache=True) 
+@numba.jit(nopython=True, cache=True)
 def logsumexp(x):
     N = x.shape[0]
 
